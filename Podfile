@@ -7,8 +7,8 @@ target 'Bender' do
 end
 
 target 'BenderTests' do
-    pod 'Quick', '~> 0.9.1'
-    pod 'Nimble', '~> 3.2.0'
+	pod 'Quick', '~> 0.9.2'
+	pod 'Nimble', '~> 4.0.1'
 end
 
 

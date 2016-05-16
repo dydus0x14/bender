@@ -1,0 +1,20 @@
+{
+    "content" : {
+        "userInfo": "https://host/959",
+        "reason": {
+            "id": "296",
+            "UUID": "UUID_UUID"
+        },
+        "key": "unknownRef",
+        "refs": {
+            "https://host/959": {
+                "id": "296",
+                "name": "Innovator"
+            },
+            "UUID_UUID": {
+                "id": "959",
+                "message": "Message"
+            }
+        }
+    }
+}

@@ -261,6 +261,37 @@ class BenderInTests: QuickSpec {
                 expect(user!.id).to(equal("123456"))
                 expect(invisibleVar).to(equal("expected value"))
             }
+            
+            it("should support json references") {
+                let jsonObject = jsonFromFile("ref_rules_test")
+                
+                let nestedUUIDRule = StructRule(ref(""))
+                    .expect("message", StringRule, { $0.value = $1 })
+                let r = StructRule(ref(id: "", message: ""))
+                    .expect("content", RefRule("reason"/"UUID", "refs", nestedUUIDRule), { $0.value.message = $1 })
+                let value = try! r.validate(jsonObject)
+                
+                expect(value.message).to(equal("Message"), description: "Simple binding to the tuples")
+                
+                
+                class Container { var user: User! }
+                let nestedUserRule = StructRule(ref(User(id: nil, name: nil)))
+                    .expect("id", StringRule, { $0.value.id = $1 })
+                    .expect("name", StringRule, { $0.value.name = $1 })
+                let userRule = ClassRule(Container())
+                    .expect("content", RefRule("userInfo", "refs", nestedUserRule), { $0.user = $1 })
+                let userContainer = try! userRule.validate(jsonObject)
+               
+                expect(userContainer.user).toNot(beNil(), description: "Binding to the nested objects")
+                expect(userContainer.user.id).to(equal("296"))
+                expect(userContainer.user.name).to(equal("Innovator"))
+                
+                
+                let v = try? ClassRule(Container())
+                    .expect("content", RefRule("key", "refs", nestedUserRule), { $0.user = $1 })
+                    .validate(jsonObject)
+                expect(v).to(beNil(), description: "RefRule with unknown reference")
+            }
         }
         
         describe("Array validation") {

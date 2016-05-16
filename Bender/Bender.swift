@@ -986,3 +986,39 @@ public func /(path: JSONPath, right: String) -> JSONPath {
     return JSONPath(path.elements + [right])
 }
 
+/**
+ Validator for object with value which is located on reference
+ */
+public class RefRule<T, R: Rule where R.V == T>: Rule {
+    public typealias V = T
+    private let pathToRef: JSONPath
+    private let pathToVal: JSONPath
+    private let nestedRule: R
+    
+    /**
+     Validator initializer
+     
+     - parameter pathToRef: JSONPath where identifier of reference is located
+     - parameter pathToVal: JSONPath where dictionary with values is located
+     - parameter nestedRule: rule to validate JSON decoded from reference
+     */
+    init(_ pathToRef: JSONPath, _ pathToVal: JSONPath, _ nestedRule: R) {
+        self.pathToRef = pathToRef
+        self.pathToVal = pathToVal
+        self.nestedRule = nestedRule
+    }
+    
+    public func validate(jsonValue: AnyObject) throws -> T {
+        guard let refValue = objectIn(jsonValue, atPath: pathToRef) as? String else {
+            throw RuleError.ExpectedNotFound("Unable to validate \"\(jsonValue)\" as \(T.self). \"\(pathToRef)\" is not a correct reference.", nil)
+        }
+        guard let value = objectIn(jsonValue, atPath: pathToVal/refValue) else {
+            throw RuleError.ExpectedNotFound("Unable to validate \"\(jsonValue)\" as \(T.self). Reference \"\(pathToVal/refValue)\" does not exist.", nil)
+        }
+        return try nestedRule.validate(value)
+    }
+    
+    public func dump(value: V) throws -> AnyObject {
+        throw RuleError.InvalidDump("Not implemented yet: impossible to know reference key without json context", nil)
+    }
+}
