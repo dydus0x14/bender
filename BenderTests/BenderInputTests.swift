@@ -265,32 +265,77 @@ class BenderInTests: QuickSpec {
             it("should support json references") {
                 let jsonObject = jsonFromFile("ref_rules_test")
                 
-                let nestedUUIDRule = StructRule(ref(""))
+                let nestedMessageRule = StructRule(ref(""))
                     .expect("message", StringRule, { $0.value = $1 })
-                let r = StructRule(ref(id: "", message: ""))
-                    .expect("content", RefRule("reason"/"UUID", "refs", nestedUUIDRule), { $0.value.message = $1 })
-                let value = try! r.validate(jsonObject)
                 
-                expect(value.message).to(equal("Message"), description: "Simple binding to the tuples")
+                let ruleDecorator = RefRuleDecorator(nestedMessageRule)
+                let contentRule = StructRule(ref(""))
+                    .expect("content"/"reason"/"UUID", ruleDecorator, { $0.value = $1 })
+                let refAdapterRule = RefRuleAdapter("content"/"refs", contentRule)
+                ruleDecorator.refRequest = refAdapterRule.resolve
                 
+                let value = try! refAdapterRule.validate(jsonObject)
                 
+                expect(value).to(equal("Message"), description: "Simple binding to the tuples")
+             
                 class Container { var user: User! }
                 let nestedUserRule = StructRule(ref(User(id: nil, name: nil)))
                     .expect("id", StringRule, { $0.value.id = $1 })
                     .expect("name", StringRule, { $0.value.name = $1 })
+                let refDecoratorUserRule = RefRuleDecorator(nestedUserRule)
                 let userRule = ClassRule(Container())
-                    .expect("content", RefRule("userInfo", "refs", nestedUserRule), { $0.user = $1 })
-                let userContainer = try! userRule.validate(jsonObject)
+                    .expect("content"/"userInfo", refDecoratorUserRule, { $0.user = $1 })
+                let refAdapterUserRule = RefRuleAdapter("content"/"refs", userRule)
+                refDecoratorUserRule.refRequest = refAdapterUserRule.resolve
+                let userContainer = try! refAdapterUserRule.validate(jsonObject)
                
                 expect(userContainer.user).toNot(beNil(), description: "Binding to the nested objects")
                 expect(userContainer.user.id).to(equal("296"))
                 expect(userContainer.user.name).to(equal("Innovator"))
                 
                 
-                let v = try? ClassRule(Container())
-                    .expect("content", RefRule("key", "refs", nestedUserRule), { $0.user = $1 })
-                    .validate(jsonObject)
+                let decorRule = RefRuleDecorator(nestedUserRule)
+                let contRule = ClassRule(Container())
+                    .expect("content"/"key", decorRule, { $0.user = $1 })
+                let refAdapterContainerRule = RefRuleAdapter("content"/"refs", contRule)
+                decorRule.refRequest = refAdapterContainerRule.resolve
+                
+                let v = try? refAdapterContainerRule.validate(jsonObject)
                 expect(v).to(beNil(), description: "RefRule with unknown reference")
+            }
+            
+            it("should support references to any nested rules and a few reference rules at the same time"){
+                let jsonObject = jsonFromFile("advanced_ref_rules_test")
+                
+                let nestedUserRule = StructRule(ref(User(id: nil, name: nil)))
+                    .expect("id", StringRule, { $0.value.id = $1 })
+                    .expect("name", StringRule, { $0.value.name = $1 })
+                let decorRule = RefRuleDecorator(nestedUserRule)
+                
+                class UserContainer { var user: User!; var isValid: Bool! }
+                let userContainer = ClassRule(UserContainer())
+                    .expect("isValid", BoolRule, { $0.isValid = $1 })
+                    .expect("path"/"url", decorRule, { $0.user = $1 })
+                
+                class Content { var users: [UserContainer]! }
+                
+                let contentRule = ClassRule(Content())
+                    .expect("content", ArrayRule(itemRule: userContainer, invalidItemHandler: {_ in return } ), { $0.users = $1} )
+                let adapter = RefRuleAdapter("refs", contentRule)
+                decorRule.refRequest = adapter.resolve
+                
+                let value = try! adapter.validate(jsonObject)
+                expect(value.users).toNot(beNil())
+                expect(value.users.count).to(equal(2), description: "The last user item should not be validated because it contains unknown reference.")
+                expect(value.users[0].isValid).to(beTrue())
+                expect(value.users[0].user).toNot(beNil())
+                expect(value.users[0].user.id).to(equal("id1"))
+                expect(value.users[0].user.name).to(equal("name1"))
+                
+                expect(value.users[1].isValid).to(beFalse())
+                expect(value.users[1].user).toNot(beNil())
+                expect(value.users[1].user.id).to(equal("id2"))
+                expect(value.users[1].user.name).to(equal("name2"))
             }
         }
         

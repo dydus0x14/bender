@@ -1,0 +1,38 @@
+{
+    "content": [
+                {
+                "id": 1,
+                "path": {
+                    "id": "test",
+                    "url": "uuid1"
+                },
+                "isValid": true
+                },
+                {
+                "id": 2,
+                "path": {
+                "id": "test",
+                "url": "uuid2"
+                },
+                "isValid": false
+                },
+                {
+                "id": 3,
+                "path": {
+                "id": "test",
+                "url": "uuid"
+                },
+                "isValid": true
+                },
+    ],
+    "refs": {
+        "uuid1": {
+            "id": "id1",
+            "name": "name1"
+        },
+        "uuid2": {
+            "id": "id2",
+            "name": "name2"
+        }
+    }
+}

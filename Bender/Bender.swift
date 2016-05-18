@@ -987,38 +987,75 @@ public func /(path: JSONPath, right: String) -> JSONPath {
 }
 
 /**
- Validator for object with value which is located on reference
+ Insertes value instead of reference and validates value using hidden rule.
  */
-public class RefRule<T, R: Rule where R.V == T>: Rule {
+public class RefRuleDecorator<T, R: Rule where R.V == T>: Rule {
     public typealias V = T
-    private let pathToRef: JSONPath
-    private let pathToVal: JSONPath
+    public typealias ReferenceRequest = (String) throws -> (AnyObject)
+    
     private let nestedRule: R
     
-    /**
-     Validator initializer
-     
-     - parameter pathToRef: JSONPath where identifier of reference is located
-     - parameter pathToVal: JSONPath where dictionary with values is located
-     - parameter nestedRule: rule to validate JSON decoded from reference
-     */
-    init(_ pathToRef: JSONPath, _ pathToVal: JSONPath, _ nestedRule: R) {
-        self.pathToRef = pathToRef
-        self.pathToVal = pathToVal
+    // Closure to request value by reference outside
+    var refRequest: ReferenceRequest?
+    
+    init(_ nestedRule: R, _ request: ReferenceRequest? = nil) {
         self.nestedRule = nestedRule
+        self.refRequest = request
     }
     
     public func validate(jsonValue: AnyObject) throws -> T {
-        guard let refValue = objectIn(jsonValue, atPath: pathToRef) as? String else {
-            throw RuleError.ExpectedNotFound("Unable to validate \"\(jsonValue)\" as \(T.self). \"\(pathToRef)\" is not a correct reference.", nil)
+        guard let reference = jsonValue as? String else {
+            throw RuleError.ExpectedNotFound("Unable to validate \"\(jsonValue)\" as \(String.self). It is not a reference.", nil)
         }
-        guard let value = objectIn(jsonValue, atPath: pathToVal/refValue) else {
-            throw RuleError.ExpectedNotFound("Unable to validate \"\(jsonValue)\" as \(T.self). Reference \"\(pathToVal/refValue)\" does not exist.", nil)
+        
+        guard let refRequest = refRequest else {
+            throw RuleError.ExpectedNotFound("Impossible to resolve references. Reference request is nil", nil)
         }
-        return try nestedRule.validate(value)
+        
+        let resolvedValue = try refRequest(reference)
+        return try nestedRule.validate(resolvedValue)
     }
     
     public func dump(value: V) throws -> AnyObject {
         throw RuleError.InvalidDump("Not implemented yet: impossible to know reference key without json context", nil)
+    }
+}
+
+/*
+ Provides interface to request values from map by stringified key and validates using hidden rule.
+ */
+public class RefRuleAdapter<T, R: Rule where R.V == T>: Rule {
+    public typealias V = T
+    private let rootRule: R
+    private let path: JSONPath
+    private var references: [String: AnyObject]?
+    
+    init(_ refPath: JSONPath, _ rootRule: R) {
+        self.rootRule = rootRule
+        self.path = refPath
+    }
+    
+    // Allow to get value by ref
+    func resolve(ref: String) throws -> AnyObject {
+        guard let references = references else {
+            throw RuleError.ExpectedNotFound("Do not call this method before calling validate", nil)
+        }
+        
+        guard let value = references[ref] else {
+            throw RuleError.ExpectedNotFound("Reference \"\(ref)\" is not found", nil)
+        }
+        
+        return value
+    }
+    
+    public func validate(jsonValue: AnyObject) throws -> T {
+        references = objectIn(jsonValue, atPath: path) as? [String: AnyObject]
+        let result = try rootRule.validate(jsonValue)
+        references = nil
+        return result
+    }
+    
+    public func dump(value: V) throws -> AnyObject {
+        return try rootRule.dump(value)
     }
 }
