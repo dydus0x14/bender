@@ -69,6 +69,41 @@ class BenderPerfTests: XCTestCase {
         }
         
     }
+    
+    func testPerformance_ConcurrentBinding_5Mb_JSON() {
+        let friendRule = ClassRule(Friend())
+            .expect("id", IntRule, { $0.ID = $1 })
+            .expect("name", StringRule, { $0.name = $1 })
+        
+        let itemRule = ClassRule(Item())
+            .expect("_id", StringRule, { $0.ID = $1 })
+            .expect("index", IntRule, { $0.index = $1 })
+            .expect("guid", StringRule, { $0.guid = $1 })
+            .expect("isActive", BoolRule, { $0.isActive = $1 })
+            .expect("balance", StringRule, { $0.balance = $1 })
+            .expect("picture", StringRule, { $0.picture = $1 })
+            .expect("age", IntRule, { $0.age = $1 })
+            .expect("eyeColor", StringRule, { $0.eyeColor = $1 })
+            .expect("name", StringRule, { $0.name = $1 })
+            .expect("gender", StringRule, { $0.gender = $1 })
+            .expect("company", StringRule, { $0.company = $1 })
+            .expect("email", StringRule, { $0.email = $1 })
+            .expect("phone", StringRule, { $0.phone = $1 })
+            .expect("tags", ArrayRule(itemRule: StringRule), { $0.tags = $1 })
+            .expect("latitude", DoubleRule, { $0.latitude = $1 })
+            .expect("longitude", DoubleRule, { $0.longitude = $1 })
+            .expect("friends", ArrayRule(itemRule: friendRule), { $0.friends = $1 })
+        
+        let arrayRule = ConcurrentArrayRule(itemRule: itemRule)
+        
+        let path = Bundle(for: BenderPerfTests.self).path(forResource: "five_megs", ofType: "json")!
+        let data = try! Data(contentsOf: URL(fileURLWithPath: path))
+        let json = try! JSONSerialization.jsonObject(with: data, options: []) as AnyObject
+        
+        measure {
+            let _ = try? arrayRule.validate(json)
+        }
+    }
 }
 
 class Friend {

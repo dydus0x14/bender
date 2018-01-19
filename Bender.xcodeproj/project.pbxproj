@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		106249BD2012363C00D1E71B /* ConcurrentArrayRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106249BC2012363C00D1E71B /* ConcurrentArrayRule.swift */; };
+		106249BE2012394500D1E71B /* ConcurrentArrayRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106249BC2012363C00D1E71B /* ConcurrentArrayRule.swift */; };
 		5B05ABA91C54F71100339915 /* BenderOutputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B05ABA81C54F71100339915 /* BenderOutputTests.swift */; };
 		5B3C4B3E1C7A6A070032BA13 /* defaults_test.json in Resources */ = {isa = PBXBuildFile; fileRef = 5B3C4B3D1C7A6A070032BA13 /* defaults_test.json */; };
 		5B54EF101C3A90AE0072B2A8 /* BenderInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B54EF0F1C3A90AE0072B2A8 /* BenderInputTests.swift */; };
@@ -79,6 +81,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		106249BC2012363C00D1E71B /* ConcurrentArrayRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcurrentArrayRule.swift; sourceTree = "<group>"; };
 		275234511DD0A3620096F1D0 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		275234521DD0A3620096F1D0 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		5B05ABA81C54F71100339915 /* BenderOutputTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BenderOutputTests.swift; sourceTree = "<group>"; };
@@ -198,6 +201,7 @@
 				C147F5421DF83A6F00899BF7 /* RuleError.swift */,
 				C147F5451DF83B8A00899BF7 /* StringifiedJSONRule.swift */,
 				C147F5481DF83C1A00899BF7 /* TypeRule.swift */,
+				106249BC2012363C00D1E71B /* ConcurrentArrayRule.swift */,
 			);
 			path = Bender;
 			sourceTree = "<group>";
@@ -469,6 +473,7 @@
 				C147F5401DF8393800899BF7 /* ObjectRule.swift in Sources */,
 				5B54EF1B1C3A90FD0072B2A8 /* Bender.swift in Sources */,
 				C147F5371DF8329300899BF7 /* ArrayRule.swift in Sources */,
+				106249BD2012363C00D1E71B /* ConcurrentArrayRule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +509,7 @@
 				C1F6A62A1FE5168000FE716B /* ObjectRule.swift in Sources */,
 				C1F6A62B1FE5168000FE716B /* Bender.swift in Sources */,
 				C1F6A62C1FE5168000FE716B /* ArrayRule.swift in Sources */,
+				106249BE2012394500D1E71B /* ConcurrentArrayRule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
