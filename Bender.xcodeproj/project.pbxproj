@@ -195,13 +195,13 @@
 				C1F6A6341FE5168000FE716B /* Bender-macOS.plist */,
 				5B54EF1A1C3A90FD0072B2A8 /* Bender.swift */,
 				C147F5361DF8329300899BF7 /* ArrayRule.swift */,
+				106249BC2012363C00D1E71B /* ConcurrentArrayRule.swift */,
 				C147F5391DF834C900899BF7 /* EnumRule.swift */,
 				C147F53C1DF837F200899BF7 /* JSONPath.swift */,
 				C147F53F1DF8393800899BF7 /* ObjectRule.swift */,
 				C147F5421DF83A6F00899BF7 /* RuleError.swift */,
 				C147F5451DF83B8A00899BF7 /* StringifiedJSONRule.swift */,
 				C147F5481DF83C1A00899BF7 /* TypeRule.swift */,
-				106249BC2012363C00D1E71B /* ConcurrentArrayRule.swift */,
 			);
 			path = Bender;
 			sourceTree = "<group>";

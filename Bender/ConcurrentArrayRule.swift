@@ -33,15 +33,20 @@ import Foundation
  */
 public class ConcurrentArrayRule<T, R: Rule>: Rule where R.V == T {
     public typealias V = [T]
-    fileprivate var itemRule: R
+    public typealias InvalidItemHandler = (Int, Error)throws-> Void
+    fileprivate let itemRule: R
+    fileprivate let invalidItemHandler: InvalidItemHandler?
     
     /**
      Validator initializer
      
      - parameter itemRule: rule for validating array items of type R.V
+     - parameter invalidItemHandler: handler closure which is called when the item cannnot be validated.
+     Can throw is there is no need to keep checking. The handler is called on background thread.
      */
-    public init(itemRule: R) {
+    public init(itemRule: R, invalidItemHandler: InvalidItemHandler? = nil) {
         self.itemRule = itemRule
+        self.invalidItemHandler = invalidItemHandler
     }
 
     // MARK:- Rule
@@ -59,7 +64,7 @@ public class ConcurrentArrayRule<T, R: Rule>: Rule where R.V == T {
             throw RuleError.invalidJSONType("Value of unexpected type found: \"\(jsonValue)\". Expected array of \(T.self).", nil)
         }
         
-        return self.validate(input: jsonArray)
+        return try self.validate(input: jsonArray)
     }
 
     /**
@@ -72,17 +77,18 @@ public class ConcurrentArrayRule<T, R: Rule>: Rule where R.V == T {
      - returns: returns array of AnyObject, dumped by item rule
      */
     open func dump(_ value: V) throws -> AnyObject {
-        return self.dump(input: value)
+        return try self.dump(input: value)
     }
 }
 
 extension ConcurrentArrayRule {
     
-    fileprivate func validate(input: NSArray) -> V {
+    fileprivate func validate(input: NSArray) throws -> V {
         let operationQueue = DispatchQueue(label: "", qos: .userInteractive, attributes: .concurrent)
         let semaphore = DispatchSemaphore(value: 1)
         let dispatchGroups = [DispatchGroup].init(repeating: DispatchGroup(), count: input.count)
         var result = V()
+        var resultError: Error?
         
         for (index, object) in input.enumerated() {
             dispatchGroups[index].enter()
@@ -95,21 +101,29 @@ extension ConcurrentArrayRule {
                     result.append(value)
                     semaphore.signal()
                 } catch let error {
-                    // TODO: Handle error
+                    do {
+                        try self.invalidItemHandler?(index, error)
+                    } catch let itemHandlerError {
+                        resultError = itemHandlerError
+                    }
                 }
                 dispatchGroups[index].leave()
             }
         }
         
         dispatchGroups.forEach { $0.wait() }
+        if let resultError = resultError {
+            throw resultError
+        }
         return result
     }
     
-    fileprivate func dump(input: V) -> NSArray {
+    fileprivate func dump(input: V) throws -> NSArray {
         let operationQueue = DispatchQueue(label: "", qos: .userInteractive, attributes: .concurrent)
         let semaphore = DispatchSemaphore(value: 1)
         let dispatchGroups = [DispatchGroup].init(repeating: DispatchGroup(), count: input.count)
         let result = NSMutableArray.init(capacity: input.count)
+        var resultError: Error?
         
         for (index, object) in input.enumerated() {
             dispatchGroups[index].enter()
@@ -122,13 +136,20 @@ extension ConcurrentArrayRule {
                     result.adding(value)
                     semaphore.signal()
                 } catch let error {
-                    // TODO: Handle error
+                    do {
+                        try self.invalidItemHandler?(index, error)
+                    } catch let itemHandlerError {
+                        resultError = itemHandlerError
+                    }
                 }
                 dispatchGroups[index].leave()
             }
         }
         
         dispatchGroups.forEach { $0.wait() }
+        if let resultError = resultError {
+            throw resultError
+        }
         return result
     }
 }
