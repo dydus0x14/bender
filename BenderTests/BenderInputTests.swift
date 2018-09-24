@@ -506,6 +506,32 @@ class BenderInTests: QuickSpec {
             }
         }
         
+        describe("Map rule for json object with unknown dictionary keys") {
+            it("should validate dictionary to object array properly") {
+                let jsonData = dataFromFile("map_test")
+                let userRule = StructRule(ref(User()))
+                    .expect("name", StringRule, { $0.value.name = $1 }) { $0.name }
+                
+                let usersRule = MapRule(itemRule: userRule, validateKey: { $0.id = $1 }, dumpKey: { $0.id })
+                do {
+                    let users = try usersRule.validateData(jsonData)
+                        .sorted(by: { $0.id < $1.id })
+                    
+                    expect(users.count).to(equal(2))
+                    expect(users[0].id).to(equal("userId1"))
+                    expect(users[0].name).to(equal("name1"))
+                    expect(users[1].id).to(equal("userId2"))
+                    expect(users[1].name).to(equal("name2"))
+                    
+                    let obj = try usersRule.dump(users) as! [String: [String: String]]
+                    expect(obj.keys.count).to(equal(2))
+                    expect(obj["userId1"]!["name"]).to(equal("name1"))
+                    expect(obj["userId2"]!["name"]).to(equal("name2"))
+                } catch let err {
+                    expect(false).to(equal(true), description: "\(err)")
+                }
+            }
+        }
     }
 }
 

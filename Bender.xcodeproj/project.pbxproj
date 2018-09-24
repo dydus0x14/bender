@@ -21,6 +21,12 @@
 		5BCE65501C7F9BF6000603ED /* array_skip_test.json in Resources */ = {isa = PBXBuildFile; fileRef = 5BCE654F1C7F9BF6000603ED /* array_skip_test.json */; };
 		5BCE65551C8326EB000603ED /* path_test.json in Resources */ = {isa = PBXBuildFile; fileRef = 5BCE65541C8326EB000603ED /* path_test.json */; };
 		764766151D7076EC00C60F0B /* paths_through_arrays.json in Resources */ = {isa = PBXBuildFile; fileRef = 764766141D7076EC00C60F0B /* paths_through_arrays.json */; };
+		BE78F46621580E2400089E50 /* MapRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE78F46521580E2400089E50 /* MapRule.swift */; };
+		BE78F46821580E2400089E50 /* MapRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE78F46521580E2400089E50 /* MapRule.swift */; };
+		BE78F4702158103E00089E50 /* map_test.json in Resources */ = {isa = PBXBuildFile; fileRef = BE78F46F2158103E00089E50 /* map_test.json */; };
+		BE78F4712158103E00089E50 /* map_test.json in Resources */ = {isa = PBXBuildFile; fileRef = BE78F46F2158103E00089E50 /* map_test.json */; };
+		BE78F4722158103E00089E50 /* map_test.json in Resources */ = {isa = PBXBuildFile; fileRef = BE78F46F2158103E00089E50 /* map_test.json */; };
+		BE78F4732158103E00089E50 /* map_test.json in Resources */ = {isa = PBXBuildFile; fileRef = BE78F46F2158103E00089E50 /* map_test.json */; };
 		C141AD7F1DF17F90005698F2 /* Bender.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B54EF001C3A90AE0072B2A8 /* Bender.framework */; };
 		C147F5371DF8329300899BF7 /* ArrayRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C147F5361DF8329300899BF7 /* ArrayRule.swift */; };
 		C147F53A1DF834C900899BF7 /* EnumRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C147F5391DF834C900899BF7 /* EnumRule.swift */; };
@@ -99,6 +105,8 @@
 		5BCE654F1C7F9BF6000603ED /* array_skip_test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = array_skip_test.json; sourceTree = "<group>"; };
 		5BCE65541C8326EB000603ED /* path_test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = path_test.json; sourceTree = "<group>"; };
 		764766141D7076EC00C60F0B /* paths_through_arrays.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = paths_through_arrays.json; sourceTree = "<group>"; };
+		BE78F46521580E2400089E50 /* MapRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRule.swift; sourceTree = "<group>"; };
+		BE78F46F2158103E00089E50 /* map_test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = map_test.json; sourceTree = "<group>"; };
 		C147F5361DF8329300899BF7 /* ArrayRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayRule.swift; sourceTree = "<group>"; };
 		C147F5391DF834C900899BF7 /* EnumRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumRule.swift; sourceTree = "<group>"; };
 		C147F53C1DF837F200899BF7 /* JSONPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONPath.swift; sourceTree = "<group>"; };
@@ -198,6 +206,7 @@
 				C147F5421DF83A6F00899BF7 /* RuleError.swift */,
 				C147F5451DF83B8A00899BF7 /* StringifiedJSONRule.swift */,
 				C147F5481DF83C1A00899BF7 /* TypeRule.swift */,
+				BE78F46521580E2400089E50 /* MapRule.swift */,
 			);
 			path = Bender;
 			sourceTree = "<group>";
@@ -221,6 +230,7 @@
 				5B3C4B3D1C7A6A070032BA13 /* defaults_test.json */,
 				5BCE65541C8326EB000603ED /* path_test.json */,
 				C1650E971DFFEED400081BFB /* five_megs.json */,
+				BE78F46F2158103E00089E50 /* map_test.json */,
 			);
 			path = BenderTests;
 			sourceTree = "<group>";
@@ -326,7 +336,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Evgenii Kamyshanov";
 				TargetAttributes = {
 					5B54EEFF1C3A90AE0072B2A8 = {
@@ -336,11 +346,11 @@
 					5B54EF091C3A90AE0072B2A8 = {
 						CreatedOnToolsVersion = 7.2;
 						LastSwiftMigration = 0900;
+						ProvisioningStyle = Manual;
 					};
 					C1492AA81FE53ABB008ECAF8 = {
 						CreatedOnToolsVersion = 9.2;
-						DevelopmentTeam = JU6Q9E22B5;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					C1F6A6231FE5168000FE716B = {
 						LastSwiftMigration = 0920;
@@ -372,6 +382,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE78F4702158103E00089E50 /* map_test.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +396,7 @@
 				764766151D7076EC00C60F0B /* paths_through_arrays.json in Resources */,
 				5BCE65501C7F9BF6000603ED /* array_skip_test.json in Resources */,
 				5B54EF1F1C3D39DB0072B2A8 /* array_test.json in Resources */,
+				BE78F4712158103E00089E50 /* map_test.json in Resources */,
 				5BAEB5121C47D0480044C0A7 /* recursive_test.json in Resources */,
 				5B54EF231C3D4AD50072B2A8 /* enum_test.json in Resources */,
 				5B54EF211C3D46ED0072B2A8 /* natural_array_test.json in Resources */,
@@ -404,6 +416,7 @@
 				C1492ABC1FE53BCA008ECAF8 /* array_skip_test.json in Resources */,
 				C1492ABD1FE53BCA008ECAF8 /* natural_array_test.json in Resources */,
 				C1492ABE1FE53BCA008ECAF8 /* enum_test.json in Resources */,
+				BE78F4732158103E00089E50 /* map_test.json in Resources */,
 				C1492ABF1FE53BCA008ECAF8 /* stringified_test.json in Resources */,
 				C1492AC01FE53BCA008ECAF8 /* stringified_negative_test.json in Resources */,
 				C1492AC11FE53BCA008ECAF8 /* recursive_test.json in Resources */,
@@ -417,6 +430,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE78F4722158103E00089E50 /* map_test.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,6 +476,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C147F53D1DF837F200899BF7 /* JSONPath.swift in Sources */,
+				BE78F46621580E2400089E50 /* MapRule.swift in Sources */,
 				C147F53A1DF834C900899BF7 /* EnumRule.swift in Sources */,
 				C147F5461DF83B8A00899BF7 /* StringifiedJSONRule.swift in Sources */,
 				C147F5491DF83C1A00899BF7 /* TypeRule.swift in Sources */,
@@ -497,6 +512,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1F6A6251FE5168000FE716B /* JSONPath.swift in Sources */,
+				BE78F46821580E2400089E50 /* MapRule.swift in Sources */,
 				C1F6A6261FE5168000FE716B /* EnumRule.swift in Sources */,
 				C1F6A6271FE5168000FE716B /* StringifiedJSONRule.swift in Sources */,
 				C1F6A6281FE5168000FE716B /* TypeRule.swift in Sources */,
@@ -654,12 +670,12 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kamyshanov.Bender;
 				PRODUCT_NAME = Bender;
-				SDKROOT = iphoneos11.2;
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -682,10 +698,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kamyshanov.Bender;
 				PRODUCT_NAME = Bender;
-				SDKROOT = iphoneos11.2;
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -693,6 +709,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -702,7 +720,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kamyshanov.BenderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -710,6 +728,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -719,7 +739,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kamyshanov.BenderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -738,9 +758,9 @@
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = JU6Q9E22B5;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
@@ -751,9 +771,10 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kamyshanov.BenderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -772,9 +793,9 @@
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = JU6Q9E22B5;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
@@ -785,8 +806,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kamyshanov.BenderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -810,12 +832,12 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kamyshanov.Bender;
 				PRODUCT_NAME = Bender;
-				SDKROOT = macosx10.13;
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = "x86_64 i386";
 			};
 			name = Debug;
@@ -840,11 +862,11 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kamyshanov.Bender;
 				PRODUCT_NAME = Bender;
-				SDKROOT = macosx10.13;
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VALID_ARCHS = "x86_64 i386";
 			};
 			name = Release;
