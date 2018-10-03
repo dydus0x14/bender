@@ -227,6 +227,15 @@ class BenderOutTests: QuickSpec {
                 expect(user?.id).to(equal(userStruct.id))
             }
             
+            it("should dump dictionaries without compile errors") {
+                let obj: [String: Any] = ["name": "name", "size": 123]
+                
+                let folderRule = StructRule(ref(Folder(name: "", size: 0, folders: nil)))
+                    .expect("name", StringRule) { $0.name }
+                    .expect("size", Int64Rule) { $0.size }
+                _ = try? folderRule.validate(obj)
+            }
+            
         }
         
         describe("Array dump") {

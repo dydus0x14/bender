@@ -37,11 +37,11 @@ public class ObjectRule<T, RefT>: Rule {
     public typealias V = T
     
     fileprivate typealias LateBindClosure = (RefT) -> Void
-    fileprivate typealias RuleClosure = (AnyObject) throws -> LateBindClosure?
-    fileprivate typealias OptionalRuleClosure = (AnyObject?) throws -> LateBindClosure?
-    fileprivate typealias RequirementClosure = (AnyObject) throws -> Bool
-    fileprivate typealias DumpRuleClosure = (T) throws -> AnyObject
-    fileprivate typealias DumpOptionalRuleClosure = (T) throws -> AnyObject?
+    fileprivate typealias RuleClosure = (Any) throws -> LateBindClosure?
+    fileprivate typealias OptionalRuleClosure = (Any?) throws -> LateBindClosure?
+    fileprivate typealias RequirementClosure = (Any) throws -> Bool
+    fileprivate typealias DumpRuleClosure = (T) throws -> Any
+    fileprivate typealias DumpOptionalRuleClosure = (T) throws -> Any?
     
     fileprivate var pathRequirements = [(JSONPath, RequirementClosure)]()
     
@@ -216,7 +216,7 @@ public class ObjectRule<T, RefT>: Rule {
      
      - returns: object of generic parameter argument if validation was successful
      */
-    open func validate(_ jsonValue: AnyObject) throws -> T {
+    open func validate(_ jsonValue: Any) throws -> T {
         guard let json = jsonValue as? NSDictionary else {
             throw RuleError.invalidJSONType("Value of unexpected type found: \"\(jsonValue)\". Expected dictionary \(T.self).", nil)
         }
@@ -236,21 +236,21 @@ public class ObjectRule<T, RefT>: Rule {
     }
     
     /**
-     Dumps compund object of type T to [String: AnyObject] dictionary. Throws in case if any nested rule does.
+     Dumps compund object of type T to [String: Any] dictionary. Throws in case if any nested rule does.
      
      - parameter value: compund value of type T
      
      - throws: throws RuleError
      
-     - returns: [String: AnyObject] dictionary
+     - returns: [String: Any] dictionary
      */
-    open func dump(_ value: T) throws -> AnyObject {
-        var dictionary = [String: AnyObject]()
+    open func dump(_ value: T) throws -> Any {
+        var dictionary = [String: Any]()
         
         try dumpMandatoryRules(value, dictionary: &dictionary)
         try dumpOptionalRules(value, dictionary: &dictionary)
         
-        return dictionary as AnyObject
+        return dictionary
     }
     
     /**
@@ -370,7 +370,7 @@ public class ObjectRule<T, RefT>: Rule {
         return bindings
     }
     
-    fileprivate func dumpMandatoryRules(_ value: T, dictionary: inout [String: AnyObject]) throws {
+    fileprivate func dumpMandatoryRules(_ value: T, dictionary: inout [String: Any]) throws {
         for (path, rule) in mandatoryDumpRules {
             try autoreleasepool {
                 do {
@@ -382,7 +382,7 @@ public class ObjectRule<T, RefT>: Rule {
         }
     }
     
-    fileprivate func dumpOptionalRules(_ value: T, dictionary: inout [String: AnyObject]) throws {
+    fileprivate func dumpOptionalRules(_ value: T, dictionary: inout [String: Any]) throws {
         for (path, rule) in optionalDumpRules {
             try autoreleasepool {
                 do {

@@ -35,14 +35,14 @@ import Foundation
 public class NumberRule<T>: Rule {
     public typealias V = T
     
-    public func validate(_ jsonValue: AnyObject) throws -> T {
+    public func validate(_ jsonValue: Any) throws -> T {
         guard let number = jsonValue as? NSNumber else {
             throw RuleError.invalidJSONType("Value of unexpected type found: \"\(jsonValue)\". Expected \(T.self).", nil)
         }
         return try validateNumber(number)
     }
     
-    public func dump(_ value: T) throws -> AnyObject {
+    public func dump(_ value: T) throws -> Any {
         return try toAny(value)
     }
     
@@ -106,14 +106,14 @@ public class TypeRule<T>: Rule {
     public init() {
     }
     
-    open func validate(_ jsonValue: AnyObject) throws -> T {
+    open func validate(_ jsonValue: Any) throws -> T {
         guard let value = jsonValue as? T else {
             throw RuleError.invalidJSONType("Value of unexpected type found: \"\(jsonValue)\". Expected \(T.self).", nil)
         }
         return value
     }
     
-    open func dump(_ value: V) throws -> AnyObject {
+    open func dump(_ value: V) throws -> Any {
         return try toAny(value)
     }
 }
@@ -135,15 +135,15 @@ public let BoolRule = TypeRule<Bool>()
 public let StringRule = TypeRule<String>()
 
 /**
- Helper generic function for converting integral values of type T to AnyObject.
+ Helper generic function for converting integral values of type T to Any.
  
  - parameter t: value of type T to be converted
  
- - throws: throws RuleError if type of the value cannot be converted to AnyObject
+ - throws: throws RuleError if type of the value cannot be converted to Any
  
- - returns: returns AnyObject with boxed t value inside
+ - returns: returns Any with boxed t value inside
  */
-func toAny<T>(_ t: T) throws -> AnyObject {
+func toAny<T>(_ t: T) throws -> Any {
     switch t {
     case let v as Int: return NSNumber(value: v)
     case let v as Int8: return NSNumber(value: v)

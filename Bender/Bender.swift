@@ -34,8 +34,8 @@ import Foundation
  */
 public protocol Rule {
     associatedtype V
-    func validate(_ jsonValue: AnyObject) throws -> V
-    func dump(_ value: V) throws -> AnyObject
+    func validate(_ jsonValue: Any) throws -> V
+    func dump(_ value: V) throws -> Any
 }
 
 // MARK: - Helpers
@@ -46,7 +46,7 @@ public extension Rule {
             guard let data = jsonData else {
                 throw RuleError.expectedNotFound("Unable to get JSON object: no data found.", nil)
             }
-            return try validate(try JSONSerialization.jsonObject(with: data, options: []) as AnyObject)
+            return try validate(try JSONSerialization.jsonObject(with: data, options: []))
         } catch let error as RuleError {
             throw RuleError.invalidJSONType("Unable to get JSON from data given.", error)
         } catch let error {
@@ -56,7 +56,8 @@ public extension Rule {
     
     public func dumpData(_ value: V) throws -> Data {
         do {
-            return try JSONSerialization.data(withJSONObject: try dump(value), options: JSONSerialization.WritingOptions(rawValue: 0))
+            return try JSONSerialization.data(withJSONObject: try dump(value),
+                                              options: JSONSerialization.WritingOptions(rawValue: 0))
         } catch let error as RuleError {
             throw RuleError.invalidDump("Unable to dump value \(value) to JSON data.", error)
         } catch let error {

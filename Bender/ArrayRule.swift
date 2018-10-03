@@ -35,7 +35,7 @@ import Foundation
 public class ArrayRule<T, R: Rule>: Rule where R.V == T {
     public typealias V = [T]
     
-    typealias ValidateClosure = (AnyObject) throws -> T
+    typealias ValidateClosure = (Any) throws -> T
     public typealias InvalidItemHandler = (Error) throws -> Void
     
     fileprivate var itemRule: R
@@ -64,7 +64,7 @@ public class ArrayRule<T, R: Rule>: Rule where R.V == T {
      
      - returns: array of objects of first generic parameter argument if validation was successful
      */
-    open func validate(_ jsonValue: AnyObject) throws -> V {
+    open func validate(_ jsonValue: Any) throws -> V {
         guard let jsonArray = jsonValue as? NSArray else {
             throw RuleError.invalidJSONType("Value of unexpected type found: \"\(jsonValue)\". Expected array of \(T.self).", nil)
         }
@@ -76,7 +76,7 @@ public class ArrayRule<T, R: Rule>: Rule where R.V == T {
             for object in jsonArray {
                 try autoreleasepool {
                     do {
-                        newArray.append(try itemRule.validate(object as AnyObject))
+                        newArray.append(try itemRule.validate(object))
                         index += 1
                     } catch let handlerError {
                         try invalidItemHandler(handlerError)
@@ -91,16 +91,16 @@ public class ArrayRule<T, R: Rule>: Rule where R.V == T {
     }
     
     /**
-     Dumps array of AnyObject type in case of success. Throws if cannot dump any item in source array.
+     Dumps array of Any type in case of success. Throws if cannot dump any item in source array.
      
      - parameter value: array with items of type T
      
      - throws: throws RuleError if cannot dump any item in source array
      
-     - returns: returns array of AnyObject, dumped by item rule
+     - returns: returns array of Any, dumped by item rule
      */
-    open func dump(_ value: V) throws -> AnyObject {
-        var array = [AnyObject]()
+    open func dump(_ value: V) throws -> Any {
+        var array = [Any]()
         for (index, t) in value.enumerated() {
             try autoreleasepool {
                 do {
@@ -110,6 +110,6 @@ public class ArrayRule<T, R: Rule>: Rule where R.V == T {
                 }
             }
         }
-        return array as AnyObject
+        return array
     }
 }

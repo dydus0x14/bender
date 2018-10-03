@@ -36,8 +36,8 @@ import Foundation
 public class EnumRule<T: Equatable>: Rule {
     public typealias V = T
     
-    fileprivate var cases: [(AnyObject) throws -> T?] = []
-    fileprivate var reverseCases: [(T) throws -> AnyObject?] = []
+    fileprivate var cases: [(Any) throws -> T?] = []
+    fileprivate var reverseCases: [(T) throws -> Any?] = []
     fileprivate var byDefault: V?
     
     /**
@@ -86,7 +86,7 @@ public class EnumRule<T: Equatable>: Rule {
      
      - returns: returns enum case of type T if matching value found, throws otherwise
      */
-    open func validate(_ jsonValue: AnyObject) throws -> V {
+    open func validate(_ jsonValue: Any) throws -> V {
         for theCase in cases {
             if let value = try theCase(jsonValue) {
                 return value
@@ -101,15 +101,15 @@ public class EnumRule<T: Equatable>: Rule {
     }
     
     /**
-     Dumps AnyObject which is related to the value provided, throws in case if it is unable to convert the value.
+     Dumps Any which is related to the value provided, throws in case if it is unable to convert the value.
      
      - parameter value: enum value provided
      
      - throws: RuleError in case if it is impossible to covert the value
      
-     - returns: AnyObject to which the enum value has been encoded
+     - returns: Any to which the enum value has been encoded
      */
-    open func dump(_ value: V) throws -> AnyObject {
+    open func dump(_ value: V) throws -> Any {
         for theCase in reverseCases {
             do {
                 if let v = try theCase(value) {
