@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Bender.xcodeproj">
+      location = "self:../Sources">
    </FileRef>
 </Workspace>
